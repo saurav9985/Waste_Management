@@ -1,0 +1,24 @@
+<% 
+  const r = typeof role !== 'undefined' ? role : (user && user.role);
+%>
+<button type="button" class="sidebar-toggle" aria-label="Toggle menu">☰</button>
+<aside class="sidebar" data-sidebar>
+  <div class="sidebar__inner">
+    <p class="sidebar__label">Menu</p>
+    <% if (r === 'citizen') { %>
+      <a href="/citizen/dashboard" class="sidebar__link">Dashboard</a>
+      <a href="/citizen/complaints/new" class="sidebar__link">File a complaint</a>
+      <a href="/citizen/complaints" class="sidebar__link">My complaints</a>
+    <% } else if (r === 'admin') { %>
+      <a href="/admin/dashboard" class="sidebar__link">Overview</a>
+      <a href="/admin/bins" class="sidebar__link">Bins</a>
+      <a href="/admin/routes" class="sidebar__link">Routes</a>
+      <a href="/admin/complaints" class="sidebar__link">Complaints</a>
+      <a href="/admin/analytics" class="sidebar__link">Analytics</a>
+    <% } else if (r === 'driver') { %>
+      <a href="/driver/dashboard" class="sidebar__link">Dashboard</a>
+      <a href="/driver/route-map" class="sidebar__link">Route map</a>
+    <% } %>
+    <a href="/auth/landing" class="sidebar__link sidebar__link--muted">Home</a>
+  </div>
+</aside>

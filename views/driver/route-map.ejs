@@ -1,0 +1,50 @@
+<%- include('../partials/header', { title: 'Route map', extraCss: 'map.css', bodyClass: 'page-dashboard page-map' }) %>
+<%- include('../partials/navbar') %>
+<div class="layout">
+  <%- include('../partials/sidebar', { role: 'driver' }) %>
+  <main class="main-content main-content--wide">
+    <%- include('../partials/flash') %>
+    <header class="page-head">
+      <h1>Today’s collection route</h1>
+      <p class="page-head__sub">Follow the path — mark each bin when emptied.</p>
+    </header>
+    <div class="map-shell">
+      <div id="driver-map" class="map-canvas" data-depot-lat="<%= depot.lat %>" data-depot-lng="<%= depot.lng %>"></div>
+      <aside class="map-sidebar">
+        <% if (assignment && assignment.encodedPolyline) { %>
+          <p class="map-hint">Route loaded from municipality.</p>
+        <% } else { %>
+          <p class="map-hint">No route assigned for today yet.</p>
+        <% } %>
+        <ul class="stop-list">
+          <% bins.forEach(function (b) { %>
+            <li class="stop-list__item">
+              <div>
+                <strong><%= b.binId %></strong> — <%= b.fillLevel %>% · <%= b.location && b.location.address ? b.location.address : '' %>
+              </div>
+              <form action="/driver/bins/<%= b._id %>/collected" method="post">
+                <button type="submit" class="btn btn--small btn--primary">Mark collected</button>
+              </form>
+            </li>
+          <% }); %>
+        </ul>
+      </aside>
+    </div>
+  </main>
+</div>
+<script>
+  window.__DRIVER_ROUTE_PAGE__ = true;
+  window.__DRIVER_BINS__ = <%- JSON.stringify(bins.map(b => ({
+    id: String(b._id),
+    binId: b.binId,
+    lat: b.location && b.location.lat,
+    lng: b.location && b.location.lng,
+    fillLevel: b.fillLevel,
+    address: b.location && b.location.address
+  }))) %>;
+  window.__ROUTE_POLY__ = <%- JSON.stringify(assignment && assignment.encodedPolyline ? assignment.encodedPolyline : '') %>;
+</script>
+<% if (googleMapsApiKey && googleMapsApiKey.indexOf('your_google') === -1) { %>
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapsApiKey %>&libraries=geometry"></script>
+<% } %>
+<%- include('../partials/footer', { extraJs: 'map.js' }) %>

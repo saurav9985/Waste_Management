@@ -1,0 +1,50 @@
+<%- include('../partials/header', { title: 'My complaints', extraCss: 'dashboard.css', bodyClass: 'page-dashboard' }) %>
+<%- include('../partials/navbar') %>
+<div class="layout">
+  <%- include('../partials/sidebar', { role: 'citizen' }) %>
+  <main class="main-content">
+    <%- include('../partials/flash') %>
+    <header class="page-head">
+      <h1>Your complaints</h1>
+      <p class="page-head__sub">Track what we are doing — we will keep you posted.</p>
+    </header>
+    <% if (!complaints.length) { %>
+      <p class="empty-state">No complaints yet — your ward is clean! 🌿</p>
+    <% } else { %>
+      <div class="table-wrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Priority</th>
+              <th>Filed</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% complaints.forEach(function (c) { %>
+              <tr>
+                <td><%= c.complaintId %></td>
+                <td><%= c.title %></td>
+                <td><span class="pill pill--<%= c.status %>"><%= c.status %></span></td>
+                <td><%= c.priority %></td>
+                <td><%= new Date(c.createdAt).toLocaleString() %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      <nav class="pagination">
+        <% if (page > 1) { %>
+          <a href="?page=<%= page - 1 %>" class="btn btn--ghost">Previous</a>
+        <% } %>
+        <span>Page <%= page %> of <%= totalPages %> (<%= total %> total)</span>
+        <% if (page < totalPages) { %>
+          <a href="?page=<%= page + 1 %>" class="btn btn--ghost">Next</a>
+        <% } %>
+      </nav>
+    <% } %>
+  </main>
+</div>
+<%- include('../partials/footer') %>

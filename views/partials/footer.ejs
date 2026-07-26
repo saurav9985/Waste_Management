@@ -1,0 +1,19 @@
+  <% if (typeof extraScripts !== 'undefined' && extraScripts) { %>
+    <%- extraScripts %>
+  <% } %>
+  <% if (typeof extraJs !== 'undefined' && extraJs) { %>
+    <script src="/js/<%= extraJs %>" defer></script>
+  <% } %>
+  <script>
+    (function () {
+      var btn = document.querySelector('.sidebar-toggle');
+      var side = document.querySelector('[data-sidebar]');
+      if (btn && side) {
+        btn.addEventListener('click', function () {
+          side.classList.toggle('sidebar--open');
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

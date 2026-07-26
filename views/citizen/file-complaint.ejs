@@ -1,0 +1,49 @@
+<%- include('../partials/header', { title: 'File a complaint', extraCss: 'dashboard.css', bodyClass: 'page-dashboard' }) %>
+<%- include('../partials/navbar') %>
+<div class="layout">
+  <%- include('../partials/sidebar', { role: 'citizen' }) %>
+  <main class="main-content">
+    <%- include('../partials/flash') %>
+    <header class="page-head">
+      <h1>Tell us what is wrong 📍</h1>
+      <p class="page-head__sub">Photos help us respond faster — up to three images.</p>
+    </header>
+    <section class="card card--narrow">
+      <form action="/citizen/complaints" method="post" enctype="multipart/form-data" class="form">
+        <label class="form__label">Short title
+          <input type="text" name="title" required maxlength="120" class="form__input" placeholder="e.g. Bin overflowing on Main Road" />
+        </label>
+        <label class="form__label">What happened?
+          <textarea name="description" required rows="5" class="form__input" placeholder="Describe the issue — smell, timing, safety…"></textarea>
+        </label>
+        <label class="form__label">Category
+          <select name="category" class="form__input">
+            <option value="overflow">Overflow</option>
+            <option value="missed-pickup">Missed pickup</option>
+            <option value="smell">Smell / hygiene</option>
+            <option value="illegal-dumping">Illegal dumping</option>
+            <option value="damaged-bin">Damaged bin</option>
+            <option value="other">Other</option>
+          </select>
+        </label>
+        <label class="form__label">Location notes
+          <input type="text" name="address" class="form__input" placeholder="Landmark or street" value="<%= user.address || '' %>" />
+        </label>
+        <label class="form__label">Ward
+          <input type="text" name="ward" class="form__input" placeholder="Your ward" value="<%= user.ward || '' %>" />
+        </label>
+        <label class="form__label">Latitude (optional)
+          <input type="text" name="lat" class="form__input" placeholder="28.61" />
+        </label>
+        <label class="form__label">Longitude (optional)
+          <input type="text" name="lng" class="form__input" placeholder="77.20" />
+        </label>
+        <label class="form__label">Photos (optional, max 3)
+          <input type="file" name="images" accept="image/*" multiple class="form__input" />
+        </label>
+        <button type="submit" class="btn btn--primary">Submit complaint</button>
+      </form>
+    </section>
+  </main>
+</div>
+<%- include('../partials/footer') %>

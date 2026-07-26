@@ -1,0 +1,9 @@
+<header class="topbar">
+  <a href="/auth/landing" class="topbar__brand">Smart Waste</a>
+  <% if (user) { %>
+    <form action="/auth/logout" method="post" class="topbar__logout">
+      <span class="topbar__hello">Hi, <%= user.name %></span>
+      <button type="submit" class="btn btn--ghost">Sign out</button>
+    </form>
+  <% } %>
+</header>

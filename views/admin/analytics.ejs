@@ -1,0 +1,44 @@
+<%- include('../partials/header', { title: 'Analytics', extraCss: 'dashboard.css', bodyClass: 'page-dashboard' }) %>
+<%- include('../partials/navbar') %>
+<div class="layout">
+  <%- include('../partials/sidebar', { role: 'admin' }) %>
+  <main class="main-content">
+    <%- include('../partials/flash') %>
+    <header class="page-head">
+      <h1>Analytics</h1>
+      <p class="page-head__sub">Complaints and bins — last 30 days for trends.</p>
+    </header>
+    <div class="chart-grid">
+      <div class="card">
+        <h2 class="card__title">Complaints per day</h2>
+        <canvas id="chart-daily" height="120"></canvas>
+      </div>
+      <div class="card">
+        <h2 class="card__title">Categories</h2>
+        <canvas id="chart-category" height="120"></canvas>
+      </div>
+      <div class="card">
+        <h2 class="card__title">Status mix</h2>
+        <canvas id="chart-status" height="120"></canvas>
+      </div>
+      <div class="card">
+        <h2 class="card__title">Avg fill by zone</h2>
+        <canvas id="chart-zones" height="120"></canvas>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  window.__CHART_DATA__ = {
+    dailyLabels: <%- JSON.stringify(dailyLabels) %>,
+    dailyValues: <%- JSON.stringify(dailyValues) %>,
+    categoryLabels: <%- JSON.stringify(categoryLabels) %>,
+    categoryValues: <%- JSON.stringify(categoryValues) %>,
+    statusLabels: <%- JSON.stringify(statusLabels) %>,
+    statusValues: <%- JSON.stringify(statusValues) %>,
+    zoneLabels: <%- JSON.stringify(zoneLabels) %>,
+    zoneAvgFill: <%- JSON.stringify(zoneAvgFill) %>,
+  };
+</script>
+<%- include('../partials/footer', { extraJs: 'charts.js' }) %>

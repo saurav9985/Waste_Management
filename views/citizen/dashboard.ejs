@@ -1,0 +1,44 @@
+<%- include('../partials/header', { title: 'Dashboard', extraCss: 'dashboard.css', bodyClass: 'page-dashboard' }) %>
+<%- include('../partials/navbar') %>
+<div class="layout">
+  <%- include('../partials/sidebar', { role: 'citizen' }) %>
+  <main class="main-content">
+    <%- include('../partials/flash') %>
+    <header class="page-head">
+      <h1>Hello, <%= user.name %> 👋</h1>
+      <p class="page-head__sub">Bins in <%= user.ward || 'your area' %> — stay ahead of overflows.</p>
+      <% if (unreadCount > 0) { %>
+        <a href="/citizen/complaints" class="badge badge--alert"><%= unreadCount %> update<%= unreadCount > 1 ? 's' : '' %> on your complaints</a>
+      <% } %>
+    </header>
+    <section class="card">
+      <h2 class="card__title">Bins near you</h2>
+      <% if (!bins.length) { %>
+        <p class="empty-state">No bins listed for your ward yet — check back soon.</p>
+      <% } else { %>
+        <div class="bin-grid">
+          <% bins.forEach(function (b) { %>
+            <article class="bin-tile">
+              <div class="bin-tile__head">
+                <span class="bin-tile__id"><%= b.binId %></span>
+                <span class="pill pill--<%= b.status %>"><%= b.status %></span>
+              </div>
+              <p class="bin-tile__addr"><%= b.location && b.location.address ? b.location.address : 'Address on file' %></p>
+              <% 
+                var pClass = 'progress--low';
+                if (b.fillLevel > 80) pClass = 'progress--high';
+                else if (b.fillLevel > 50) pClass = 'progress--mid';
+              %>
+              <div class="progress <%= pClass %>" data-level="<%= b.fillLevel %>">
+                <div class="progress__bar" style="width: <%= b.fillLevel %>%"></div>
+                <span class="progress__label"><%= b.fillLevel %>% full</span>
+              </div>
+              <p class="bin-tile__meta">Type: <%= b.wasteType %></p>
+            </article>
+          <% }); %>
+        </div>
+      <% } %>
+    </section>
+  </main>
+</div>
+<%- include('../partials/footer') %>

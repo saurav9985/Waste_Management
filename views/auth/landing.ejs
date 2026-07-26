@@ -1,0 +1,28 @@
+<%- include('../partials/header', { title: 'Welcome', extraCss: 'auth.css', bodyClass: 'page-auth' }) %>
+<main class="auth-landing">
+  <div class="auth-landing__hero">
+    <h1>Smart Cities</h1>
+    <p class="auth-landing__tagline">Smart Waste Collection Optimization — cleaner streets, smarter routes.</p>
+  </div>
+  <div class="role-cards">
+    <a href="/auth/citizen/login" class="role-card role-card--citizen">
+      <span class="role-card__icon" aria-hidden="true">🏘️</span>
+      <h2>Citizen</h2>
+      <p>Report waste issues in your area</p>
+      <span class="role-card__cta">Sign in</span>
+    </a>
+    <a href="/auth/admin/login" class="role-card role-card--admin">
+      <span class="role-card__icon" aria-hidden="true">🏛️</span>
+      <h2>Municipality</h2>
+      <p>Manage city waste operations</p>
+      <span class="role-card__cta">Sign in</span>
+    </a>
+    <a href="/auth/driver/login" class="role-card role-card--driver">
+      <span class="role-card__icon" aria-hidden="true">🚛</span>
+      <h2>Driver</h2>
+      <p>View your collection routes</p>
+      <span class="role-card__cta">Sign in</span>
+    </a>
+  </div>
+</main>
+<%- include('../partials/footer') %>

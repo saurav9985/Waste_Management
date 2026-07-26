@@ -1,0 +1,19 @@
+<%- include('../partials/header', { title: 'Municipality sign in', extraCss: 'auth.css', bodyClass: 'page-auth' }) %>
+<main class="auth-panel">
+  <div class="auth-panel__card">
+    <h1>Municipality sign in</h1>
+    <p class="auth-panel__hint">Manage bins, routes, and complaints.</p>
+    <%- include('../partials/flash') %>
+    <form action="/auth/admin/login" method="post" class="form">
+      <label class="form__label">Work email
+        <input type="email" name="email" required placeholder="admin@smartcity.gov.in" class="form__input" />
+      </label>
+      <label class="form__label">Password
+        <input type="password" name="password" required placeholder="Your password" class="form__input" />
+      </label>
+      <button type="submit" class="btn btn--primary btn--block">Sign in</button>
+    </form>
+    <p class="auth-panel__back"><a href="/auth/landing">← Back to roles</a></p>
+  </div>
+</main>
+<%- include('../partials/footer') %>

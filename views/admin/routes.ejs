@@ -1,0 +1,60 @@
+<%- include('../partials/header', { title: 'Routes', extraCss: 'map.css', bodyClass: 'page-dashboard page-map' }) %>
+<%- include('../partials/navbar') %>
+<div class="layout">
+  <%- include('../partials/sidebar', { role: 'admin' }) %>
+  <main class="main-content main-content--wide">
+    <%- include('../partials/flash') %>
+    <header class="page-head">
+      <h1>Route optimization</h1>
+      <p class="page-head__sub">High-fill bins (≥<%= highFill %>%). We optimize up to <%= maxWaypoints %> stops per run.</p>
+    </header>
+    <div class="map-shell">
+      <div id="admin-map" class="map-canvas" data-depot-lat="<%= depot.lat %>" data-depot-lng="<%= depot.lng %>"></div>
+      <aside class="map-sidebar">
+        <h2>High-priority bins</h2>
+        <form id="route-select-form">
+          <% bins.forEach(function (b) { %>
+            <label class="check-row">
+              <input type="checkbox" name="binIds" value="<%= b._id %>" checked />
+              <span><strong><%= b.binId %></strong> — <%= b.fillLevel %>% · <%= b.location && b.location.address ? b.location.address : '' %></span>
+            </label>
+          <% }); %>
+          <% if (!bins.length) { %>
+            <p class="empty-state">No high-fill bins right now — check bins page for details.</p>
+          <% } %>
+        </form>
+        <button type="button" id="btn-generate" class="btn btn--primary btn--block">Generate optimized route</button>
+        <p id="route-status" class="map-hint" aria-live="polite"></p>
+        <div id="direction-steps" class="direction-steps"></div>
+        <form action="/admin/routes/assign" method="post" id="assign-form" class="assign-form">
+          <input type="hidden" name="orderedBinIds" id="field-ordered" />
+          <input type="hidden" name="encodedPolyline" id="field-poly" />
+          <input type="hidden" name="legsSummary" id="field-legs" />
+          <label>Assign to driver
+            <select name="driverId" required class="form__input">
+              <option value="">Choose driver</option>
+              <% drivers.forEach(function (d) { %>
+                <option value="<%= d._id %>"><%= d.name %> — <%= d.vehicleNumber %></option>
+              <% }); %>
+            </select>
+          </label>
+          <button type="submit" class="btn btn--secondary btn--block">Assign route</button>
+        </form>
+      </aside>
+    </div>
+  </main>
+</div>
+<script>
+  window.__ADMIN_ROUTE_PAGE__ = true;
+  window.__BINS__ = <%- JSON.stringify(bins.map(b => ({
+    id: String(b._id),
+    binId: b.binId,
+    lat: b.location && b.location.lat,
+    lng: b.location && b.location.lng,
+    fillLevel: b.fillLevel
+  }))) %>;
+</script>
+<% if (googleMapsApiKey && googleMapsApiKey.indexOf('your_google') === -1) { %>
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= googleMapsApiKey %>&libraries=geometry"></script>
+<% } %>
+<%- include('../partials/footer', { extraJs: 'map.js' }) %>

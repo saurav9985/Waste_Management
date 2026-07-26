@@ -1,0 +1,55 @@
+<%- include('../partials/header', { title: 'Overview', extraCss: 'dashboard.css', bodyClass: 'page-dashboard' }) %>
+<%- include('../partials/navbar') %>
+<div class="layout">
+  <%- include('../partials/sidebar', { role: 'admin' }) %>
+  <main class="main-content">
+    <%- include('../partials/flash') %>
+    <header class="page-head">
+      <h1>Operations overview</h1>
+      <p class="page-head__sub">Data-driven waste management at a glance.</p>
+    </header>
+    <div class="stat-grid">
+      <article class="stat-card">
+        <h3>Total bins</h3>
+        <p class="stat-card__num"><%= stats.totalBins %></p>
+      </article>
+      <article class="stat-card stat-card--warn">
+        <h3>High fill / overflow</h3>
+        <p class="stat-card__num"><%= stats.overflowBins %></p>
+      </article>
+      <article class="stat-card">
+        <h3>Pending complaints</h3>
+        <p class="stat-card__num"><%= stats.pendingComplaints %></p>
+      </article>
+      <article class="stat-card">
+        <h3>Active drivers</h3>
+        <p class="stat-card__num"><%= stats.activeDrivers %></p>
+      </article>
+      <article class="stat-card">
+        <h3>Today’s collections</h3>
+        <p class="stat-card__num"><%= stats.collectionsToday %></p>
+        <p class="stat-card__hint">Bins emptied today</p>
+      </article>
+      <article class="stat-card stat-card--accent">
+        <h3>Resolved this month</h3>
+        <p class="stat-card__num"><%= stats.resolvedPct %>%</p>
+        <p class="stat-card__hint"><%= stats.resolvedMonth %> / <%= stats.filedMonth %> complaints</p>
+      </article>
+    </div>
+    <section class="card">
+      <h2 class="card__title">Bins needing attention</h2>
+      <% if (!alertBins.length) { %>
+        <p class="empty-state">No critical bins right now — routes look calm.</p>
+      <% } else { %>
+        <ul class="alert-list">
+          <% alertBins.forEach(function (b) { %>
+            <li>
+              <strong><%= b.binId %></strong> — <%= b.fillLevel %>% · <%= b.location && b.location.ward ? b.location.ward : 'ward n/a' %>
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+  </main>
+</div>
+<%- include('../partials/footer') %>

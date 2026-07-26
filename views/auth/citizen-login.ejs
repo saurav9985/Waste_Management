@@ -1,0 +1,20 @@
+<%- include('../partials/header', { title: 'Citizen sign in', extraCss: 'auth.css', bodyClass: 'page-auth' }) %>
+<main class="auth-panel">
+  <div class="auth-panel__card">
+    <h1>Citizen sign in</h1>
+    <p class="auth-panel__hint">We will show bins and complaints for your ward.</p>
+    <%- include('../partials/flash') %>
+    <form action="/auth/citizen/login" method="post" class="form">
+      <label class="form__label">Email
+        <input type="email" name="email" required placeholder="you@example.com" class="form__input" />
+      </label>
+      <label class="form__label">Password
+        <input type="password" name="password" required placeholder="Your password" class="form__input" />
+      </label>
+      <button type="submit" class="btn btn--primary btn--block">Sign in</button>
+    </form>
+    <p class="auth-panel__footer">New here? <a href="/auth/citizen/register">Create an account</a></p>
+    <p class="auth-panel__back"><a href="/auth/landing">← Back to roles</a></p>
+  </div>
+</main>
+<%- include('../partials/footer') %>

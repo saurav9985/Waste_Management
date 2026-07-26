@@ -1,0 +1,37 @@
+<%- include('../partials/header', { title: 'Create account', extraCss: 'auth.css', bodyClass: 'page-auth' }) %>
+<main class="auth-panel">
+  <div class="auth-panel__card auth-panel__card--wide">
+    <h1>Create your citizen account</h1>
+    <p class="auth-panel__hint">We will use your ward to show nearby bins.</p>
+    <%- include('../partials/flash') %>
+    <form action="/auth/citizen/register" method="post" class="form form--grid">
+      <label class="form__label">Full name
+        <input type="text" name="name" required class="form__input" placeholder="How should we call you?" />
+      </label>
+      <label class="form__label">Email
+        <input type="email" name="email" required class="form__input" placeholder="you@example.com" />
+      </label>
+      <label class="form__label">Password
+        <input type="password" name="password" required minlength="6" class="form__input" placeholder="At least 6 characters" />
+      </label>
+      <label class="form__label">Confirm password
+        <input type="password" name="confirmPassword" required class="form__input" placeholder="Same as above" />
+      </label>
+      <label class="form__label">Phone (optional)
+        <input type="text" name="phone" class="form__input" placeholder="For urgent follow-up" />
+      </label>
+      <label class="form__label">Address (optional)
+        <input type="text" name="address" class="form__input" placeholder="Street, area" />
+      </label>
+      <label class="form__label">Ward
+        <input type="text" name="ward" class="form__input" placeholder="e.g. Ward 12" />
+      </label>
+      <div class="form__actions">
+        <button type="submit" class="btn btn--primary">Register</button>
+      </div>
+    </form>
+    <p class="auth-panel__footer">Already registered? <a href="/auth/citizen/login">Sign in</a></p>
+    <p class="auth-panel__back"><a href="/auth/landing">← Back to roles</a></p>
+  </div>
+</main>
+<%- include('../partials/footer') %>

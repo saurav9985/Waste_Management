@@ -1,0 +1,65 @@
+<%- include('../partials/header', { title: 'Driver', extraCss: 'dashboard.css', bodyClass: 'page-dashboard' }) %>
+<%- include('../partials/navbar') %>
+<div class="layout">
+  <%- include('../partials/sidebar', { role: 'driver' }) %>
+  <main class="main-content">
+    <%- include('../partials/flash') %>
+    <header class="page-head">
+      <h1>Hi, <%= driver.name %></h1>
+      <p class="page-head__sub">Vehicle <%= driver.vehicleNumber %> · Zone <%= driver.assignedZone || '—' %></p>
+    </header>
+    <div class="stat-grid stat-grid--compact">
+      <article class="stat-card">
+        <h3>Availability</h3>
+        <p class="stat-card__num"><%= driver.isAvailable ? 'On duty' : 'Off duty' %></p>
+        <form action="/driver/availability" method="post">
+          <input type="hidden" name="_method" value="PATCH" />
+          <button type="submit" class="btn btn--secondary"><%= driver.isAvailable ? 'Go unavailable' : 'Go available' %></button>
+        </form>
+      </article>
+      <article class="stat-card">
+        <h3>Today’s stops</h3>
+        <p class="stat-card__num"><%= routeBins.length %></p>
+        <a href="/driver/route-map" class="btn btn--primary">Open route map</a>
+      </article>
+    </div>
+    <section class="card">
+      <h2 class="card__title">Update location</h2>
+      <form action="/driver/location" method="post" class="form form--inline">
+        <input type="text" name="lat" placeholder="Latitude" class="form__input" required />
+        <input type="text" name="lng" placeholder="Longitude" class="form__input" required />
+        <button type="submit" class="btn btn--secondary">Save</button>
+      </form>
+      <% if (driver.currentLocation && driver.currentLocation.lat) { %>
+        <p class="hint">Last: <%= driver.currentLocation.lat %>, <%= driver.currentLocation.lng %></p>
+      <% } %>
+    </section>
+    <section class="card">
+      <h2 class="card__title">Assigned complaints</h2>
+      <% if (!myComplaints.length) { %>
+        <p class="empty-state">No open complaints assigned — focus on the route.</p>
+      <% } else { %>
+        <ul class="alert-list">
+          <% myComplaints.forEach(function (c) { %>
+            <li>
+              <strong><%= c.complaintId %></strong> — <%= c.title %> (<%= c.priority %>)
+            </li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+    <section class="card">
+      <h2 class="card__title">Recent completed routes</h2>
+      <% if (!history.length) { %>
+        <p class="empty-state">No history yet.</p>
+      <% } else { %>
+        <ul class="alert-list">
+          <% history.forEach(function (h) { %>
+            <li><%= new Date(h.routeDate).toDateString() %> — <%= h.orderedBinIds ? h.orderedBinIds.length : 0 %> stops</li>
+          <% }); %>
+        </ul>
+      <% } %>
+    </section>
+  </main>
+</div>
+<%- include('../partials/footer') %>

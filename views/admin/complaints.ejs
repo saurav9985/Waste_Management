@@ -1,0 +1,100 @@
+<%- include('../partials/header', { title: 'Complaints', extraCss: 'dashboard.css', bodyClass: 'page-dashboard' }) %>
+<%- include('../partials/navbar') %>
+<div class="layout">
+  <%- include('../partials/sidebar', { role: 'admin' }) %>
+  <main class="main-content">
+    <%- include('../partials/flash') %>
+    <header class="page-head">
+      <h1>Complaints</h1>
+      <p class="page-head__sub">Filter, prioritize, and keep citizens in the loop.</p>
+    </header>
+    <form method="get" class="filters">
+      <label>Status
+        <select name="status">
+          <option value="">All</option>
+          <% ['pending','in-progress','resolved','rejected'].forEach(function (s) { %>
+            <option value="<%= s %>" <%= filters.status === s ? 'selected' : '' %>><%= s %></option>
+          <% }); %>
+        </select>
+      </label>
+      <label>Priority
+        <select name="priority">
+          <option value="">All</option>
+          <% ['low','medium','high'].forEach(function (p) { %>
+            <option value="<%= p %>" <%= filters.priority === p ? 'selected' : '' %>><%= p %></option>
+          <% }); %>
+        </select>
+      </label>
+      <label>Category
+        <select name="category">
+          <option value="">All</option>
+          <% ['overflow','missed-pickup','smell','illegal-dumping','damaged-bin','other'].forEach(function (c) { %>
+            <option value="<%= c %>" <%= filters.category === c ? 'selected' : '' %>><%= c %></option>
+          <% }); %>
+        </select>
+      </label>
+      <label>Ward contains
+        <input type="text" name="ward" value="<%= filters.ward || '' %>" placeholder="e.g. 12" />
+      </label>
+      <button type="submit" class="btn btn--primary">Apply</button>
+    </form>
+    <div class="table-wrap table-wrap--wide">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Citizen</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% complaints.forEach(function (c) { %>
+            <tr>
+              <td><%= c.complaintId %></td>
+              <td><%= c.citizen ? c.citizen.name : '—' %></td>
+              <td><%= c.title %></td>
+              <td><span class="pill pill--<%= c.status %>"><%= c.status %></span></td>
+              <td><%= c.priority %></td>
+              <td>
+                <form action="/admin/complaints/<%= c._id %>" method="post" class="inline-form">
+                  <select name="status" class="form__input form__input--small">
+                    <% ['pending','in-progress','resolved','rejected'].forEach(function (s) { %>
+                      <option value="<%= s %>" <%= c.status === s ? 'selected' : '' %>><%= s %></option>
+                    <% }); %>
+                  </select>
+                  <select name="priority" class="form__input form__input--small">
+                    <% ['low','medium','high'].forEach(function (p) { %>
+                      <option value="<%= p %>" <%= c.priority === p ? 'selected' : '' %>><%= p %></option>
+                    <% }); %>
+                  </select>
+                  <select name="assignedDriver" class="form__input form__input--small">
+                    <option value="none">No driver</option>
+                    <% drivers.forEach(function (d) { %>
+                      <% var aid = c.assignedDriver ? (c.assignedDriver._id || c.assignedDriver).toString() : ''; %>
+                      <option value="<%= d._id %>" <%= aid === d._id.toString() ? 'selected' : '' %>><%= d.name %></option>
+                    <% }); %>
+                  </select>
+                  <input type="text" name="adminRemarks" placeholder="Remarks" value="<%= c.adminRemarks || '' %>" class="form__input form__input--small" />
+                  <button type="submit" class="btn btn--small btn--primary">Save</button>
+                </form>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <nav class="pagination">
+      <% if (page > 1) { %>
+        <a href="?page=<%= page - 1 %>&status=<%= filters.status || '' %>&priority=<%= filters.priority || '' %>&category=<%= filters.category || '' %>&ward=<%= filters.ward || '' %>" class="btn btn--ghost">Previous</a>
+      <% } %>
+      <span>Page <%= page %> of <%= totalPages %> (<%= total %>)</span>
+      <% if (page < totalPages) { %>
+        <a href="?page=<%= page + 1 %>&status=<%= filters.status || '' %>&priority=<%= filters.priority || '' %>&category=<%= filters.category || '' %>&ward=<%= filters.ward || '' %>" class="btn btn--ghost">Next</a>
+      <% } %>
+    </nav>
+  </main>
+</div>
+<%- include('../partials/footer') %>

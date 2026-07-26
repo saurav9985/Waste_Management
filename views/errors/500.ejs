@@ -1,0 +1,9 @@
+<%- include('../partials/header', { title: 'Error', extraCss: 'auth.css', bodyClass: 'page-auth' }) %>
+<main class="error-page">
+  <div class="error-page__card">
+    <h1>Something went wrong</h1>
+    <p class="error-page__msg"><%= err && err.message ? err.message : 'Please try again in a moment.' %></p>
+    <a href="/auth/landing" class="btn btn--primary">Go home</a>
+  </div>
+</main>
+<%- include('../partials/footer') %>
